@@ -1,0 +1,50 @@
+const express = require("express");
+const mongoose = require("mongoose");
+const cors = require("cors");
+require("dotenv").config();
+
+const app = express();
+
+app.use(cors());
+app.use(express.json());
+
+const TripSchema = new mongoose.Schema({
+  date: String,
+  startKm: Number,
+  endKm: Number,
+  from: String,
+  to: String,
+});
+
+const Trip = mongoose.model("Trip", TripSchema);
+
+app.get("/trips", async (req, res) => {
+  const data = await Trip.find();
+  res.json(data);
+});
+app.post("/trips", async (req, res) => {
+  const trip = new Trip(req.body);
+  await trip.save();
+  res.json(trip);
+});
+app.put("/trips/:id", async (req, res) => {
+  try {
+    const updated = await Trip.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+    });
+    res.json(updated);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+mongoose
+  .connect(process.env.MONGO_URI)
+  .then(() => {
+    console.log("MongoDB Connected");
+
+    app.listen(5050, () => {
+      console.log("Server Running on Port 5050");
+    });
+  })
+  .catch((err) => console.log(err));
