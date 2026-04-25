@@ -49,4 +49,8 @@ mongoose
       console.log(`Server Running on Port ${PORT}`);
     });
   })
-  .catch((err) => console.log(err));
+  .catch((err) => {
+    console.log("MongoDB connectipon error noooooooo!", err);
+
+    process.exit(1);
+  });
