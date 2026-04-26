@@ -37,7 +37,19 @@ app.put("/trips/:id", async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
+app.delete("/trips/:id", async (req, res) => {
+  try {
+    const deleted = await Trip.findByIdAndDelete(req.params.id);
 
+    if (!deleted) {
+      return res.status(404).json({ message: "Trip not found" });
+    }
+
+    res.json({ message: "Trip deleted successfully", deleted });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
 mongoose
   .connect(process.env.MONGO_URI)
   .then(() => {
