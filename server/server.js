@@ -6,11 +6,11 @@ require("dotenv").config();
 const app = express();
 
 // app.use(cors());
-const cors = require("cors");
+
 
 app.use(
   cors({
-    origin: ["https://drivelog-jade.vercel.app"],
+    origin: true,
     credentials: true,
   })
 );
