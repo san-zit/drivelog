@@ -5,7 +5,16 @@ require("dotenv").config();
 
 const app = express();
 
-app.use(cors());
+// app.use(cors());
+const cors = require("cors");
+
+app.use(
+  cors({
+    origin: ["https://drivelog-jade.vercel.app"],
+    credentials: true,
+  })
+);
+
 app.use(express.json());
 
 const TripSchema = new mongoose.Schema({
@@ -38,8 +47,12 @@ app.put("/trips/:id", async (req, res) => {
   }
 });
 app.delete("/trips/:id", async (req, res) => {
+  console.log("DELETE ID:", req.params.id);
+
   try {
     const deleted = await Trip.findByIdAndDelete(req.params.id);
+
+    console.log("Deleted result:", deleted);
 
     if (!deleted) {
       return res.status(404).json({ message: "Trip not found" });
@@ -47,6 +60,7 @@ app.delete("/trips/:id", async (req, res) => {
 
     res.json({ message: "Trip deleted successfully", deleted });
   } catch (err) {
+    console.log("Delete error:", err);
     res.status(500).json({ error: err.message });
   }
 });

@@ -2,7 +2,9 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "../styles/DriverLogDashboard.css";
 
-const API = "http://localhost:5050";
+// const API = "http://localhost:5050";
+
+const API = import.meta.env.VITE_API;
 
 const DriverLogDashboard = () => {
   const [trips, setTrips] = useState([]);
